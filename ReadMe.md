@@ -67,3 +67,8 @@ Keywords:
 ## Экономика
 > SRC: https://vk.com/im?sel=c64&msgid=713165
 - 10/11 раздел (мне 10ый)
+
+> SRC: https://vk.com/im?sel=c64&msgid=712060
+Слюсарь Тамара Леонидовна	
+Вторник 1,3 уч. н. 15.20 810-5
+tamara_econ@mail.ru
