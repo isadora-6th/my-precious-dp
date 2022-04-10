@@ -1,4 +1,4 @@
-# Мой любимый диплом
+# Info
 
 Backup:
 > https://github.com/isadora-6th/my-precious-dp
@@ -64,3 +64,6 @@ Keywords:
  - https://en.wikipedia.org/wiki/Unidirectional_network
  - https://www.securitylab.ru/contest/409633.php
 
+## Экономика
+> SRC: https://vk.com/im?sel=c64&msgid=713165
+- 10/11 раздел (мне 10ый)
