@@ -45,18 +45,8 @@ Keywords:
 </details>
 
 ## Патентный поиск
-- https://www.osp.ru/search?text=%D0%BE%D0%B4%D0%BD%D0%BE%D0%BD%D0%B0%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9+%D0%BF%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D1%87%D0%B8+%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85
-- https://findpatent.ru/patent/221/2214623.html
+- https://www.anti-malware.ru/analytics/Market_Analysis/Data-Diodes
 
-### Actual
-- https://findpatent.ru/patent/269/2691192.html
-- https://findpatent.ru/patent/230/2304302.html
-- https://findpatent.ru/patent/260/2607997.html
-- https://findpatent.ru/patent/231/2314562.html
-- https://findpatent.ru/patent/242/2422892.html
-- https://findpatent.ru/patent/243/2432695.html
-- https://findpatent.ru/patent/271/2712815.html
-- https://findpatent.ru/patent/258/2580004.html
 
 
 ## Текста для воды  
