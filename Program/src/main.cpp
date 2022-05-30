@@ -4,8 +4,6 @@
 #include <thread>
 #include <iostream>
 
-#include <networking/sender.hpp>
-
 #define IPADDRESS "127.0.0.1" // "192.168.1.64"
 #define UDP_PORT 13253
 
@@ -19,7 +17,7 @@ void Sender(std::string in) {
     socket.open(udp::v4());
 
     boost::system::error_code err;
-    auto sent = socket.send(boost::asio::buffer(in), remote_endpoint, 0, err);
+    auto sent = socket.send_to(boost::asio::buffer(in), remote_endpoint, 0, err);
     socket.close();
     std::cout << "Sent Payload --- " << sent << "\n";
 }
