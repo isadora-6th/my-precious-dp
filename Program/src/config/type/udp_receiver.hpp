@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include <boost/asio/ip/address.hpp>
 #include <boost/asio/ip/udp.hpp>
 
@@ -11,7 +13,7 @@ namespace ip = boost::asio::ip;
 
 struct Configuration {
   ip::udp ip_version; // udp::v4()
-  ip::address target_ip;
+  std::optional<ip::address> target_ip; //ip::address_v4::any()
   ip::port_type target_port;
   int datagram_max_size;
   int buffer_count;

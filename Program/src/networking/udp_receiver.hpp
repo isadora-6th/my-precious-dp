@@ -1,18 +1,18 @@
 #pragma once
 
+#include <vector>
+#include <optional>
+#include <functional>
+
 #include <boost/asio.hpp>
 #include <boost/asio/ip/address.hpp>
 #include <boost/asio/ip/udp.hpp>
 #include <config/type/udp_receiver.hpp>
-#include <functional>
 #include <models/udp_buffer.hpp>
-#include <vector>
 
 namespace networking::udp_receiver {
 
 namespace ip = boost::asio::ip;
-
-
 
 class UdpReceiver {
  public:
@@ -25,10 +25,15 @@ class UdpReceiver {
         ip_version_(config.ip_version),
         buffer_queue_(config.buffer_count, config.datagram_max_size),
         socket_(io_service_),
-        remote_endpoint_(config.target_ip, config.target_port),
+        remote_endpoint_(boost::asio::ip::address_v4::any(), config.target_port),
+        expected_source_ip(config.target_ip),
         handler_(handler){};
 
   void Start();
+
+  class ReceiveFailed : std::runtime_error {
+    using std::runtime_error::runtime_error;
+  };
 
   class BufferCorrupted : std::runtime_error {
     using std::runtime_error::runtime_error;
@@ -41,6 +46,7 @@ class UdpReceiver {
  private:
   void WaitReceive();
   void Handle(std::unique_ptr<models::udp_buffer::DataBuffer> data_buffer,
+              std::unique_ptr<ip::udp::endpoint> udp_source,
               const boost::system::error_code& error, size_t bytes_transferred);
   bool started_;
   int thread_count_;
@@ -49,6 +55,7 @@ class UdpReceiver {
   boost::asio::io_service io_service_;
   ip::udp::socket socket_{io_service_};
   ip::udp::endpoint remote_endpoint_;
+  std::optional<ip::address> expected_source_ip;
   std::vector<std::thread> receive_threads_;
   HandlerType handler_;
 };

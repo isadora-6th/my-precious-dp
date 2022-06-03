@@ -9,7 +9,7 @@ Configuration Get(const ::config::storage::Storage& /*storage*/){
 Configuration Default(){
   return {
     ip::udp::v4(),
-    ip::address::from_string("127.0.0.1"),
+    std::nullopt,
     ip::port_type(2022),
     1'048'576 /*datagram_max_size = 1 MiB*/,
     8 /*buffer_count*/,

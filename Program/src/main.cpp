@@ -8,7 +8,7 @@
 #include <networking/udp_sender.hpp>
 #include <thread>
 
-#define IPADDRESS "127.0.0.1"  // "192.168.1.64"
+#define IPADDRESS "127.0.0.1"  // "192.168.1.64" //192.168.100.31
 #define UDP_PORT 13253
 
 using boost::asio::ip::address;
@@ -42,6 +42,7 @@ struct Client {
       std::cout << "Receive failed: " << error.message() << "\n";
       return;
     }
+    std::cout << "WOW: " << remote_endpoint.address();
     std::cout << "Received: '"
               << std::string(recv_buffer.begin(),
                              recv_buffer.begin() + bytes_transferred)
@@ -64,7 +65,8 @@ struct Client {
 
   void Receiver() {
     socket.open(udp::v4());
-    socket.bind(udp::endpoint(address::from_string(IPADDRESS), UDP_PORT));
+    remote_endpoint = udp::endpoint(boost::asio::ip::address_v4::any(), UDP_PORT);
+    socket.bind(remote_endpoint);
 
     wait();
 
