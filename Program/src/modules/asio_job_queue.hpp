@@ -4,25 +4,22 @@
 #include <iostream>
 #include <thread>
 
-namespace modules::asio_thread_pool {
+namespace modules::asio_job_queue {
 
-class AsioThreadPool {
+class AsioJobQueue {
  public:
-  AsioThreadPool(std::size_t pool_size) : work_(io_service_) {
+  AsioJobQueue(std::size_t pool_size) : work_(io_service_) {
     for (std::size_t i = 0; i < pool_size; ++i) {
-      threads_.push_back(
-          std::thread([this] { io_service_.run(); }));
+      threads_.push_back(std::thread([this] { io_service_.run(); }));
     }
   }
-  ~AsioThreadPool();
+  ~AsioJobQueue();
 
   template <typename Task>
   void Shedule(Task task) {
     const std::lock_guard<std::mutex> lock(mutex_);
 
-    io_service_.post([this, &task](){
-      Wrapper(std::function<void()>(task));
-    });
+    io_service_.post([this, &task]() { Wrapper(std::function<void()>(task)); });
   }
 
  private:
@@ -34,4 +31,4 @@ class AsioThreadPool {
   std::mutex mutex_;
 };
 
-}  // namespace modules::asio_thread_pool
+}  // namespace modules::asio_job_queue

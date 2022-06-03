@@ -9,12 +9,9 @@
 namespace models::udp_buffer {
 
 struct DataBuffer {
-  DataBuffer(bool _locked, int _last_datagram_size, std::vector<char>&& _buffer)
-      : locked(_locked),
-        last_datagram_size(_last_datagram_size),
-        buffer(_buffer) {}
-  std::atomic<bool> locked;
-  std::atomic<int> last_datagram_size;
+  DataBuffer(int _last_datagram_size, std::vector<char>&& _buffer)
+      : last_datagram_size(_last_datagram_size), buffer(_buffer) {}
+  int last_datagram_size;
   std::vector<char> buffer;
 };
 
@@ -26,11 +23,12 @@ class BufferQueue {
 
   BufferQueue(int queue_size, int buffer_size);
 
-  std::unique_ptr<DataBuffer>& AquireBuffer();
+  std::unique_ptr<DataBuffer> AquireBuffer();
+  void ReleaseBuffer(std::unique_ptr<DataBuffer> buffer_to_release);
 
  private:
-  std::vector<std::unique_ptr<DataBuffer>> buffer_ring_;
-  std::vector<std::unique_ptr<DataBuffer>>::iterator current_position_;
+  int buffer_size_; 
+  std::vector<std::unique_ptr<DataBuffer>> free_buffers_;
   std::mutex mutex_;
 };
 

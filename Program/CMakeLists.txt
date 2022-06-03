@@ -46,6 +46,8 @@ FetchContent_MakeAvailable(nlohmann_json)
 
 file (GLOB source_files 
     "${source_dir}/*.cpp"
+    "${source_dir}/config/type/*.cpp" 
+    "${source_dir}/config/*.cpp" 
     "${source_dir}/helpers/*.cpp" 
     "${source_dir}/models/*.cpp" 
     "${source_dir}/modules/*.cpp" 
