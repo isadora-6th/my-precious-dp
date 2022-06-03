@@ -4,13 +4,6 @@
 
 namespace config::storage {
 
-enum class Type {
-  kUdpReceiver,
-  kReceiveBuffer
-};
-
-
-
 class Storage {
 private:
   Storage();

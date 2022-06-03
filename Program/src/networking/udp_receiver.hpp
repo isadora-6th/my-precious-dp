@@ -25,8 +25,8 @@ class UdpReceiver {
         ip_version_(config.ip_version),
         buffer_queue_(config.buffer_count, config.datagram_max_size),
         socket_(io_service_),
-        remote_endpoint_(boost::asio::ip::address_v4::any(), config.target_port),
-        expected_source_ip(config.target_ip),
+        receiver_endpoint_(boost::asio::ip::address_v4::any(), config.target_port),
+        expected_source_ip_(config.target_ip),
         handler_(handler){};
 
   void Start();
@@ -45,8 +45,8 @@ class UdpReceiver {
 
  private:
   void WaitReceive();
-  void Handle(std::unique_ptr<models::udp_buffer::DataBuffer> data_buffer,
-              std::unique_ptr<ip::udp::endpoint> udp_source,
+  void Handle(models::udp_buffer::DataBuffer& data_buffer,
+              ip::udp::endpoint& udp_source,
               const boost::system::error_code& error, size_t bytes_transferred);
   bool started_;
   int thread_count_;
@@ -54,8 +54,8 @@ class UdpReceiver {
   models::udp_buffer::BufferQueue buffer_queue_;
   boost::asio::io_service io_service_;
   ip::udp::socket socket_{io_service_};
-  ip::udp::endpoint remote_endpoint_;
-  std::optional<ip::address> expected_source_ip;
+  ip::udp::endpoint receiver_endpoint_;
+  std::optional<ip::address> expected_source_ip_;
   std::vector<std::thread> receive_threads_;
   HandlerType handler_;
 };
