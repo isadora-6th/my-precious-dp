@@ -32,8 +32,6 @@ std::unique_ptr<DataBuffer> BufferQueue::AquireBuffer() {
   auto buffer = std::move(free_buffers_.back());
   free_buffers_.pop_back();
 
-  LOG_DEBUG() << "Buffer aquired\n";
-
   return buffer;
 }
 

@@ -1,6 +1,9 @@
 #include "udp_receiver.hpp"
 
+#include <fmt/core.h>
+
 #include <boost/bind/bind.hpp>
+#include <unordered_set>
 #include <utils/Logging.hpp>
 
 namespace networking::udp_receiver {
@@ -63,9 +66,15 @@ void UdpReceiver::Handle(models::udp_buffer::DataBuffer& data_buffer,
                          ip::udp::endpoint& udp_source,
                          const boost::system::error_code& error,
                          size_t bytes_transferred) {
+  static const std::unordered_set<int> ignored_errors{995 /*ERROR_OPERATION_ABORTED*/};
+
   if (error) {
-    LOG_WARNING() << "Receive failed: " << error.message() << "\n";
-    throw ReceiveFailed(error.message());
+    if (!ignored_errors.contains(error.value())) {
+      LOG_WARNING() << fmt::format("Receive failed: {} | Val: {} | Cat: {}\n",
+                                   error.message(), error.value(),
+                                   error.category().name());
+    }
+    return;
   }
 
   if (expected_source_ip_) {
