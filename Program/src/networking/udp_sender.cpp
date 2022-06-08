@@ -2,7 +2,7 @@
 
 #include <fmt/core.h>
 
-#include <utils/Logging.hpp>
+#include <utils/logging.hpp>
 
 namespace networking::udp_sender {
 

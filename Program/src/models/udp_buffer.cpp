@@ -1,6 +1,6 @@
 #include "udp_buffer.hpp"
 
-#include <utils/Logging.hpp>
+#include <utils/logging.hpp>
 
 namespace models::udp_buffer {
 

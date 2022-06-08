@@ -13,7 +13,16 @@ class AsioJobQueue {
       threads_.push_back(std::thread([this] { io_service_.run(); }));
     }
   }
-  ~AsioJobQueue();
+
+  ~AsioJobQueue(){
+    io_service_.stop();
+    for (auto& t : threads_) {
+      //End threads and supress exceptions if present;
+      try {
+        t.join();
+      } catch (const std::exception&) {}
+    }
+  }
 
   template <typename Task>
   void Shedule(Task task) {

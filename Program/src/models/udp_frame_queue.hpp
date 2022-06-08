@@ -1,7 +1,6 @@
 #pragma once
 
 #include <boost/asio.hpp>
-#include <boost/circular_buffer.hpp>
 #include <models/udp_buffer.hpp>
 #include <modules/asio_job_queue.hpp>
 #include <vector>

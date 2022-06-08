@@ -4,7 +4,7 @@
 
 #include <boost/bind/bind.hpp>
 #include <unordered_set>
-#include <utils/Logging.hpp>
+#include <utils/logging.hpp>
 
 namespace networking::udp_receiver {
 namespace {
@@ -66,7 +66,8 @@ void UdpReceiver::Handle(models::udp_buffer::DataBuffer& data_buffer,
                          ip::udp::endpoint& udp_source,
                          const boost::system::error_code& error,
                          size_t bytes_transferred) {
-  static const std::unordered_set<int> ignored_errors{995 /*ERROR_OPERATION_ABORTED*/};
+  static const std::unordered_set<int> ignored_errors{
+      boost::asio::error::operation_aborted};
 
   if (error) {
     if (!ignored_errors.contains(error.value())) {

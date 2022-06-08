@@ -100,33 +100,35 @@ int main(int argc, char* argv[]) {
 
 #include <config/type/udp_receiver.hpp>
 #include <config/type/udp_sender.hpp>
+#include <config/type/fs_watcher.hpp>
 #include <networking/udp_receiver.hpp>
 #include <networking/udp_sender.hpp>
+#include <modules/fs_watcher.hpp>
+#include <utils/call_each.hpp>
 
-#include <utils/Logging.hpp>
+#include <utils/logging.hpp>
+#include <fmt/core.h>
 
 int main() {
-  auto receiver_cfg = config::udp_receiver::Default();
-  auto sender_cfg = config::udp_sender::Default();
+  auto watcher_cfg = config::filesystem_watcher::Default();
+  auto watcher = modules::fs_watcher::FileWatcher(watcher_cfg, [](const modules::fs_watcher::FileDiscription& discr, modules::fs_watcher::FileAction act){
+    const static auto act_to_string = [](modules::fs_watcher::FileAction& act) {
+      switch(act){
+        case modules::fs_watcher::FileAction::kCreated:
+          return "Created";
+        case modules::fs_watcher::FileAction::kModified:
+          return "Modified";
+        case modules::fs_watcher::FileAction::kDeleted:
+          return "Deleted";
+      }
+    };
+    LOG_INFO() << fmt::format("Update> Path: {}, Size: {}, Action: {}\n", discr.path.string(), discr.size, act_to_string(act));
+  });
 
-  auto receiver = networking::udp_receiver::UdpReceiver(
-      receiver_cfg, [](models::udp_buffer::DataBuffer& data) {
-        LOG_INFO() << "RECEIVER_CALLBACK: "<< std::string(
-                          std::begin(data.buffer),
-                          std::begin(data.buffer) + data.last_datagram_size)
-                   << "\n";
-      });
-  auto sender = networking::udp_sender::UdpSender(sender_cfg);
+  watcher.List([](const modules::fs_watcher::FileDiscription& discr){
+    LOG_INFO() << fmt::format("INIT> Path: {}, Size: {}\n", discr.path.string(), discr.size);
+  });
 
-  receiver.Start();
-  sender.Start();
-
-  auto payload = std::string("Some data");
-  auto data = std::vector<char>(std::begin(payload), std::end(payload));
-  sender.Send(std::make_unique<networking::udp_sender::UdpSender::Package>(
-      networking::udp_sender::UdpSender::Package{std::move(data), 0}));
-
-  using namespace std::chrono_literals;
-  std::this_thread::sleep_for(2000ms);
+  std::this_thread::sleep_for(std::chrono::minutes(5));
   return 0;
 }
