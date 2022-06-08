@@ -18,7 +18,6 @@ struct FileDiscription {
   uintmax_t size;
   std::filesystem::file_time_type last_write_time;
 
-  
   bool operator==(const FileDiscription& other) const {
     return path == other.path && size == other.size &&
            last_write_time == other.last_write_time;
