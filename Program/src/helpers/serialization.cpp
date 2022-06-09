@@ -4,8 +4,6 @@ namespace helpers::serialization {
 
 namespace {
 
-static const int kSizeBytes = 8;
-
 template<typename IntType>
 SerializedContainer SerializeInt(const IntType& to_serialize) {
   SerializedContainer out;
@@ -18,7 +16,7 @@ SerializedContainer SerializeInt(const IntType& to_serialize) {
 }
 
 template<typename IntType>
-IntType DeserializeInt(const SerializedContainer::const_iterator& start_position) {
+IntType DeserializeInt(SerializedContainer::const_iterator& start_position) {
   IntType out = 0;
 
   const auto end = start_position + sizeof(IntType);
@@ -27,6 +25,7 @@ IntType DeserializeInt(const SerializedContainer::const_iterator& start_position
     out = (out << 8) | *it;
   }
 
+  start_position = end
   return out;
 }
 
@@ -43,9 +42,11 @@ SerializedContainer SerializeContainer(const Container& to_serialize) {
 }
 
 template<typename Container>
-Container DeserializeContainer(const SerializedContainer::const_iterator& start_position){
-  const auto size = Deserialize(start_position, To<std::uint64_t>());
+Container DeserializeContainer(SerializedContainer::const_iterator& start_position){
+  const auto size = Deserialize(start_position, to::To<std::uint64_t>());
   const auto string_start = start_position + kSizeBytes;
+
+  start_position = string_start + size;
 
   Container out(string_start, string_start + size);
   return out;
@@ -56,8 +57,8 @@ SerializedContainer Serialize(const int64_t& to_serialize) {
   return SerializeInt<int64_t>(to_serialize);
 }
 
-int64_t Deserialize(const SerializedContainer::const_iterator& start_position,
-                    To<int64_t>) {
+int64_t Deserialize(SerializedContainer::const_iterator& start_position,
+                    to::To<int64_t>) {
   return DeserializeInt<int64_t>(start_position);
 }
 
@@ -65,24 +66,24 @@ SerializedContainer Serialize(const uint64_t& to_serialize) {
   return SerializeInt<uint64_t>(to_serialize);
 }
 
-uint64_t Deserialize(const SerializedContainer::const_iterator& start_position,
-                    To<uint64_t>) {
+uint64_t Deserialize(SerializedContainer::const_iterator& start_position,
+                    to::To<uint64_t>) {
   return DeserializeInt<uint64_t>(start_position);
 }
 
 SerializedContainer Serialize(const std::string& to_serialize) {
   return SerializeContainer<std::string>(to_serialize);
 }
-std::string Deserialize(const SerializedContainer::const_iterator& start_position,
-                        To<std::string>){
+std::string Deserialize(SerializedContainer::const_iterator& start_position,
+                        to::To<std::string>){
   return DeserializeContainer<std::string>(start_position);
 }
 
 SerializedContainer Serialize(const std::vector<char>& to_serialize) {
   return SerializeContainer<std::vector<char>>(to_serialize);
 }
-std::vector<char> Deserialize(const SerializedContainer::const_iterator& start_position,
-                        To<std::vector<char>>){
+std::vector<char> Deserialize(SerializedContainer::const_iterator& start_position,
+                        to::To<std::vector<char>>){
   return DeserializeContainer<std::vector<char>>(start_position);
 }
 
