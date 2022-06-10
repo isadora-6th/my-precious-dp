@@ -2,6 +2,8 @@
 
 #include <unordered_map>
 
+#include <models/idempotency_token.hpp>
+
 namespace models::file_frame {
 
 std::string ToString(const Action& action) {
@@ -104,7 +106,7 @@ models::file_frame::FragmentHeader Deserialize(
   auto part = Deserialize(start_position, to::To<uint64_t>());
   auto parts = Deserialize(start_position, to::To<uint64_t>());
   auto part_sha256_hash = Deserialize(start_position, to::To<std::string>());
-  auto write_position = Deserialize(start_position, to::To<int64_t>());
+  auto write_position = Deserialize(start_position, to::To<uint64_t>());
 
   return models::file_frame::FragmentHeader{
     part,
@@ -120,12 +122,14 @@ SerializedContainer Serialize(
 
   auto file_header = Serialize(to_serialize.file_header);
   auto fragment_header = Serialize(to_serialize.fragment_header);
+  auto idempotency_token = Serialize(to_serialize.idempotency_token);
   auto payload = Serialize(to_serialize.payload);
 
-  out.reserve(file_header.size() + fragment_header.size() + payload.size());
+  out.reserve(file_header.size() + fragment_header.size() + idempotency_token.size() + payload.size());
 
   out.insert(out.end(), file_header.begin(), file_header.end());
   out.insert(out.end(), fragment_header.begin(), fragment_header.end());
+  out.insert(out.end(), idempotency_token.begin(), idempotency_token.end());
   out.insert(out.end(), payload.begin(), payload.end());
 
   return out;      
@@ -138,11 +142,13 @@ models::file_frame::FileFragment Deserialize(
   
   auto file_header = Deserialize(start_position, to::To<models::file_frame::FileHeader>());
   auto fragment_header = Deserialize(start_position, to::To<models::file_frame::FragmentHeader>());
+  auto idempotency_token = Deserialize(start_position, to::To<std::string>());
   auto payload = Deserialize(start_position, to::To<models::file_frame::Payload>());
 
   return models::file_frame::FileFragment{
     file_header,
     fragment_header,
+    idempotency_token,
     payload
   };
 }

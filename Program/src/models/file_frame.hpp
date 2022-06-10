@@ -33,12 +33,13 @@ struct FragmentHeader {
   uint64_t part;
   uint64_t parts;
   std::string part_sha256_hash;
-  int64_t write_position;
+  uint64_t write_position;
 };
 
 struct FileFragment {
   FileHeader file_header;
   FragmentHeader fragment_header;
+  std::string idempotency_token;
   Payload payload;
 };
 

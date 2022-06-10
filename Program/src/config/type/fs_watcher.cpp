@@ -9,7 +9,8 @@ Configuration Get(const ::config::storage::Storage& /*storage*/){
 Configuration Default(){
   return {
     std::chrono::seconds(3),
-    std::string("C:\\WORK")
+    std::string("C:\\WORK"),
+    262144 /*max_fragment_size = 256 KiB*/
   };
 }
 

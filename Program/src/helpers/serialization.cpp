@@ -25,7 +25,7 @@ IntType DeserializeInt(SerializedContainer::const_iterator& start_position) {
     out = (out << 8) | *it;
   }
 
-  start_position = end
+  start_position = end;
   return out;
 }
 

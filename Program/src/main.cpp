@@ -100,9 +100,12 @@ int main(int argc, char* argv[]) {
 #include <helpers/serialization.hpp>
 #include <models/file_frame.hpp>
 #include <utils/logging.hpp>
+#include <helpers/file_scheduler.hpp>
+#include <utils/calculate_hash.hpp>
 
 int main() {
   const auto serialized = helpers::serialization::Serialize("SErialize Test");
-  const auto deserialized = helpers::serialization::Deserialize(serialized.begin(), helpers::to::To<std::string>());
+  auto serialized_start = serialized.begin();
+  const auto deserialized = helpers::serialization::Deserialize(serialized_start, helpers::to::To<std::string>());
   LOG_INFO() << deserialized;
 }

@@ -11,7 +11,7 @@ static const int kSizeBytes = 8;
 using SerializedContainer = std::vector<char>;
 
 SerializedContainer Serialize(const int64_t& to_serialize);
-int64_t Deserialize(SerializedContainer::const_iterator& start_position, To<int64_t>);
+int64_t Deserialize(SerializedContainer::const_iterator& start_position, to::To<int64_t>);
 
 SerializedContainer Serialize(const uint64_t& to_serialize);
 uint64_t Deserialize(SerializedContainer::const_iterator& start_position,
