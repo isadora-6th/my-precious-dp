@@ -25,3 +25,5 @@ Configuration Get(const ::config::storage::Storage& storage);
 Configuration Default();
 
 }
+
+

@@ -27,3 +27,4 @@ std::vector<char> Deserialize(
     to::To<std::vector<char>>);
 
 }  // namespace helpers::serialization
+
